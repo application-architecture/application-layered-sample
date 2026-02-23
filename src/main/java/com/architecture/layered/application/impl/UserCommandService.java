@@ -7,7 +7,7 @@ import com.architecture.layered.infrastructure.api.WriteRepository;
 
 import java.util.Objects;
 
-public final class UserCommandService implements CommandUseCase {
+final class UserCommandService implements CommandUseCase {
 
     private final IdGenerator idGenerator;
     private final WriteRepository repository;

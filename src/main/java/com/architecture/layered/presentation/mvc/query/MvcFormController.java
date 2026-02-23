@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/mvc/users")
-public class FormController {
+public class MvcFormController {
 
     private final QueryUseCase service;
 
-    public FormController(QueryUseCase service) {
+    public MvcFormController(QueryUseCase service) {
         this.service = service;
     }
 

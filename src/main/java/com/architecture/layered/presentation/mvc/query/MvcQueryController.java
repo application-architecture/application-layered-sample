@@ -11,11 +11,11 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/mvc/users/search")
-public class SearchController {
+public class MvcQueryController {
 
     private final QueryUseCase service;
 
-    public SearchController(QueryUseCase service) {
+    public MvcQueryController(QueryUseCase service) {
         this.service = service;
     }
 

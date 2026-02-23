@@ -1,6 +1,6 @@
 package com.architecture.layered.presentation.mvc;
 
-import com.architecture.layered.domain.UserNotFoundException;
+import com.architecture.layered.domain.exception.UserNotFoundException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

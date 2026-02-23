@@ -2,12 +2,12 @@ package com.architecture.layered.application.impl;
 
 import com.architecture.layered.application.api.QueryUseCase;
 import com.architecture.layered.domain.User;
-import com.architecture.layered.domain.UserNotFoundException;
+import com.architecture.layered.domain.exception.UserNotFoundException;
 import com.architecture.layered.infrastructure.api.ReadRepository;
 
 import java.util.List;
 
-public final class UserQueryService implements QueryUseCase {
+final class UserQueryService implements QueryUseCase {
 
     private final ReadRepository users;
 

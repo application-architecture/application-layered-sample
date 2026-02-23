@@ -11,11 +11,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
-public final class QueryController {
+public final class RestQueryController {
 
     private final QueryUseCase service;
 
-    public QueryController(QueryUseCase service) {
+    public RestQueryController(QueryUseCase service) {
         this.service = service;
     }
 

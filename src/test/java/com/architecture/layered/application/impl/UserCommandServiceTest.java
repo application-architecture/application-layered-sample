@@ -1,6 +1,5 @@
-package com.architecture.layered.unit;
+package com.architecture.layered.application.impl;
 
-import com.architecture.layered.application.impl.UserCommandService;
 import com.architecture.layered.domain.User;
 import com.architecture.layered.fake.FakeIdGenerator;
 import com.architecture.layered.fake.FakeWriteRepository;

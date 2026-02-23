@@ -1,0 +1,71 @@
+package com.architecture.layered.web.rest;
+
+import com.architecture.layered.application.api.CommandUseCase;
+import com.architecture.layered.domain.exception.UserNotFoundException;
+import com.architecture.layered.presentation.rest.command.RestCommandController;
+import org.springframework.http.MediaType;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.web.servlet.MockMvc;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+@WebMvcTest(RestCommandController.class)
+class RestCommandControllerTest {
+
+    @Autowired MockMvc mvc;
+    @MockitoBean CommandUseCase commandUseCase;
+
+    @Test
+    void shouldCreateUser() throws Exception {
+        given(commandUseCase.createUser(any())).willReturn("1");
+
+        mvc.perform(post("/api/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                        {"name": "Alice", "birthDate": "1990-01-01"}
+                        """))
+                .andExpect(status().isCreated())
+                .andExpect(header().string("Location", "/users/1"));
+    }
+
+    @Test
+    void shouldUpdateUser() throws Exception {
+        mvc.perform(put("/api/users/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                        {"name": "Alice Updated", "birthDate": "1990-01-01"}
+                        """))
+                .andExpect(status().isNoContent());
+
+        then(commandUseCase).should().updateUser(eq("1"), any());
+    }
+
+    @Test
+    void shouldDeleteUser() throws Exception {
+        mvc.perform(delete("/api/users/1"))
+                .andExpect(status().isNoContent());
+
+        then(commandUseCase).should().deleteUser("1");
+    }
+
+    @Test
+    void shouldReturn404WhenUpdatingNonExistentUser() throws Exception {
+        willThrow(new UserNotFoundException("99"))
+                .given(commandUseCase).updateUser(eq("99"), any());
+
+        mvc.perform(put("/api/users/99")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                        {"name": "Ghost", "birthDate": "1990-01-01"}
+                        """))
+                .andExpect(status().isNotFound());
+    }
+}

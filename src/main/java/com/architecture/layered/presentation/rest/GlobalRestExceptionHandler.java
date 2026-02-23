@@ -1,6 +1,6 @@
 package com.architecture.layered.presentation.rest;
 
-import com.architecture.layered.domain.UserNotFoundException;
+import com.architecture.layered.domain.exception.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.annotation.ExceptionHandler;

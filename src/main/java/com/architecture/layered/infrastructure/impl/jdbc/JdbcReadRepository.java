@@ -10,7 +10,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Profile("jdbc")
-public class JdbcReadRepository implements ReadRepository {
+final class JdbcReadRepository implements ReadRepository {
 
     private final JdbcClient jdbc;
 

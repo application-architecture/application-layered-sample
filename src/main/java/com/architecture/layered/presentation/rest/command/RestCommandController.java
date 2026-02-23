@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/users")
-public final class CommandController {
+public final class RestCommandController {
 
     private final CommandUseCase service;
 
-    public CommandController(CommandUseCase service) {
+    public RestCommandController(CommandUseCase service) {
         this.service = service;
     }
 

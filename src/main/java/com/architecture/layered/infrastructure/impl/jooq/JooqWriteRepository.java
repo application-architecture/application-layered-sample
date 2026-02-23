@@ -1,7 +1,7 @@
 package com.architecture.layered.infrastructure.impl.jooq;
 
 import com.architecture.layered.domain.User;
-import com.architecture.layered.domain.UserNotFoundException;
+import com.architecture.layered.domain.exception.UserNotFoundException;
 import com.architecture.layered.infrastructure.api.WriteRepository;
 import org.jooq.DSLContext;
 import org.springframework.context.annotation.Profile;
@@ -11,7 +11,7 @@ import java.util.Objects;
 import static org.jooq.impl.DSL.*;
 
 @Profile("jooq")
-public class JooqWriteRepository implements WriteRepository {
+final class JooqWriteRepository implements WriteRepository {
 
     private final DSLContext dsl;
 

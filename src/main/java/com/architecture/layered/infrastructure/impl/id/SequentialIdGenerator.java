@@ -5,9 +5,9 @@ import com.architecture.layered.infrastructure.api.IdGenerator;
 import java.util.concurrent.atomic.AtomicLong;
 
 
-public class SequentialIdGenerator implements IdGenerator {
+final class SequentialIdGenerator implements IdGenerator {
 
-    private final AtomicLong seq = new AtomicLong(3);
+    private final AtomicLong seq = new AtomicLong(0);
 
     @Override
     public String nextId() {

@@ -1,8 +1,7 @@
-package com.architecture.layered.unit;
+package com.architecture.layered.application.impl;
 
-import com.architecture.layered.application.impl.UserQueryService;
 import com.architecture.layered.domain.User;
-import com.architecture.layered.domain.UserNotFoundException;
+import com.architecture.layered.domain.exception.UserNotFoundException;
 import com.architecture.layered.fake.FakeReadRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

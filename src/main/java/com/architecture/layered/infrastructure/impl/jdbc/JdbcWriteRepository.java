@@ -1,7 +1,7 @@
 package com.architecture.layered.infrastructure.impl.jdbc;
 
 import com.architecture.layered.domain.User;
-import com.architecture.layered.domain.UserNotFoundException;
+import com.architecture.layered.domain.exception.UserNotFoundException;
 import com.architecture.layered.infrastructure.api.WriteRepository;
 import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.core.simple.JdbcClient;
@@ -9,7 +9,7 @@ import org.springframework.jdbc.core.simple.JdbcClient;
 import java.util.Objects;
 
 @Profile("jdbc")
-public class JdbcWriteRepository implements WriteRepository {
+final class JdbcWriteRepository implements WriteRepository {
 
     private final JdbcClient jdbc;
 

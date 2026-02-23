@@ -12,11 +12,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/mvc/users")
-public class ActionsController {
+public class MvcCommandController {
 
     private final CommandUseCase useCase;
 
-    public ActionsController(CommandUseCase useCase) {
+    public MvcCommandController(CommandUseCase useCase) {
         this.useCase = useCase;
     }
 
