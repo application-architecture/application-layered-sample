@@ -1,3 +1,4 @@
+// @formatter:off
 package com.architecture.layered;
 
 import org.springframework.boot.SpringApplication;

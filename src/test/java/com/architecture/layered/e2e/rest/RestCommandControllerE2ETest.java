@@ -5,11 +5,13 @@ import org.springframework.http.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureRestTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.client.RestTestClient;
 
-@AutoConfigureRestTestClient
+@ActiveProfiles("jdbc")
 @Sql("/test-schema.sql")
+@AutoConfigureRestTestClient
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class RestCommandControllerE2ETest {
 
@@ -38,8 +40,9 @@ class RestCommandControllerE2ETest {
         client.put().uri("/api/users/" + id)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body("""
-                        {"name": "Bob Updated", "birthDate": "1985-05-20"}
-                        """)
+                        {"id": "%s", "name": "Bob Updated", "birthDate": "1985-05-20"}
+                        """
+                .formatted(id))
                 .exchange()
                 .expectStatus().isNoContent();
 
@@ -73,7 +76,7 @@ class RestCommandControllerE2ETest {
         client.put().uri("/api/users/99")
                 .contentType(MediaType.APPLICATION_JSON)
                 .body("""
-                        {"name": "Ghost", "birthDate": "1990-01-01"}
+                        {"id": "99", "name": "Ghost", "birthDate": "1990-01-01"}
                         """)
                 .exchange()
                 .expectStatus().isNotFound()

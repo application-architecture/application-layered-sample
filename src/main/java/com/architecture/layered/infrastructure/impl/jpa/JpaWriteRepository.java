@@ -1,3 +1,4 @@
+// @formatter:off
 package com.architecture.layered.infrastructure.impl.jpa;
 
 import com.architecture.layered.domain.User;
@@ -13,7 +14,6 @@ import org.springframework.context.annotation.Profile;
  * Package-private.
  */
 @Profile("jpa")
-@Transactional
 final class JpaWriteRepository implements WriteRepository {
 
     private final EntityManager em;
@@ -21,32 +21,24 @@ final class JpaWriteRepository implements WriteRepository {
     public JpaWriteRepository(EntityManager em) {
         this.em = em;
     }
+
     @Override
     public void save(User user) {
-        UserJpaEntity entity = new UserJpaEntity(
-                user.id(), // <-- использовать ID из домена
-                user.name(),
-                user.birthDate()
-        );
-        em.persist(entity);
+        em.persist(new UserJpaEntity(user.id(), user.name(), user.birthDate()));
     }
 
     @Override
-    public void update(String id, User user) {
-        UserJpaEntity entity = em.find(UserJpaEntity.class, id);
-        if (entity == null) throw new UserNotFoundException("User not found: " + id);
+    public void update(User user) {
+        UserJpaEntity entity = em.find(UserJpaEntity.class, user.id());
+        if (entity == null) throw new UserNotFoundException(user.id());
         entity.setName(user.name());
         entity.setBirthDate(user.birthDate());
-        em.merge(entity);
     }
 
     @Override
     public void deleteById(String id) {
         UserJpaEntity entity = em.find(UserJpaEntity.class, id);
-        if (entity == null) {
-            throw new UserNotFoundException("User not found: " + id);
-        }
+        if (entity == null) throw new UserNotFoundException(id);
         em.remove(entity);
     }
-
 }

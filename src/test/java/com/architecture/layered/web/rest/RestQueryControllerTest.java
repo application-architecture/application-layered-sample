@@ -1,12 +1,12 @@
 package com.architecture.layered.web.rest;
 
 import com.architecture.layered.application.api.QueryUseCase;
-import com.architecture.layered.domain.User;
+import com.architecture.layered.application.api.query.UserView;
 import com.architecture.layered.domain.exception.UserNotFoundException;
 import com.architecture.layered.presentation.rest.query.RestQueryController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.bean.override.mockito.MockitoBean; // всё ещё верно для 3.4+
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -24,8 +24,8 @@ class RestQueryControllerTest {
     @Autowired MockMvc mvc;
     @MockitoBean QueryUseCase queryUseCase;
 
-    private final User alice = User.create("1", "Alice", LocalDate.of(1990, 1, 1));
-    private final User bob   = User.create("2", "Bob",   LocalDate.of(1985, 5, 20));
+    private final UserView alice = new UserView("1", "Alice", LocalDate.of(1990, 1, 1));
+    private final UserView bob   = new UserView("2", "Bob",   LocalDate.of(1985, 5, 20));
 
     @Test
     void shouldReturnUserById() throws Exception {
@@ -41,8 +41,7 @@ class RestQueryControllerTest {
     void shouldReturn404WhenUserNotFound() throws Exception {
         given(queryUseCase.findById("99")).willThrow(new UserNotFoundException("99"));
 
-        mvc.perform(get("/api/users/99"))
-                .andExpect(status().isNotFound());
+        mvc.perform(get("/api/users/99")).andExpect(status().isNotFound());
     }
 
     @Test

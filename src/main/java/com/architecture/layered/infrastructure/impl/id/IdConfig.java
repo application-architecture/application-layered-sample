@@ -9,6 +9,6 @@ class IdConfig {
 
     @Bean
     IdGenerator idGenerator() {
-        return new SequentialIdGenerator();
+        return new UuidV7IdGenerator();
     }
 }

@@ -1,7 +1,7 @@
 package com.architecture.layered.web.mvc;
 
 import com.architecture.layered.application.api.QueryUseCase;
-import com.architecture.layered.domain.User;
+import com.architecture.layered.application.api.query.UserView;
 import com.architecture.layered.presentation.common.dto.Mapper;
 import com.architecture.layered.presentation.mvc.query.MvcFormController;
 import org.junit.jupiter.api.Test;
@@ -12,9 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
 
-import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
@@ -28,7 +26,7 @@ class MvcFormControllerTest {
     @Autowired MockMvc mvc;
     @MockitoBean QueryUseCase queryUseCase;
 
-    private final User alice = User.create("1", "Alice", LocalDate.of(1990, 1, 1));
+    private final UserView alice = new UserView("1", "Alice", LocalDate.of(1990, 1, 1));
 
     @Test
     void shouldShowSearchForm() throws Exception {
@@ -64,5 +62,4 @@ class MvcFormControllerTest {
                 .andExpect(view().name("form/delete-confirm-form"))
                 .andExpect(model().attribute("response", Mapper.toResponse(alice)));
     }
-
 }

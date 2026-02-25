@@ -1,3 +1,4 @@
+// @formatter:off
 package com.architecture.layered.infrastructure.impl.jdbc;
 
 import com.architecture.layered.domain.User;
@@ -49,15 +50,15 @@ final class JdbcWriteRepository implements WriteRepository {
     }
 
     @Override
-    public void update(String id, User user) {
-        Objects.requireNonNull(id, "Id must not be null");
+    public void update(User user) {
+        Objects.requireNonNull(user.id(), "Id must not be null");
         Objects.requireNonNull(user, "User must not be null");
 
         ensureFound(jdbc.sql(Sql.UPDATE)
-                .param("id", id)
+                .param("id", user.id())
                 .param("name", user.name())
                 .param("birthDate", user.birthDate())
-                .update(), id);
+                .update(), user.id());
     }
 
     @Override

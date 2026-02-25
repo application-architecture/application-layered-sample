@@ -1,14 +1,13 @@
+// @formatter:off
 package com.architecture.layered.application.impl;
 
-import com.architecture.layered.domain.User;
-import com.architecture.layered.fake.FakeIdGenerator;
+import com.architecture.layered.application.api.command.CreateUserCommand;
+import com.architecture.layered.application.api.command.UpdateUserCommand;
 import com.architecture.layered.fake.FakeWriteRepository;
-import org.junit.jupiter.api.BeforeEach;
+import com.fasterxml.uuid.Generators;import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDate;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.time.LocalDate;import static org.junit.jupiter.api.Assertions.*;
 
 class UserCommandServiceTest {
 
@@ -18,22 +17,30 @@ class UserCommandServiceTest {
     @BeforeEach
     void setUp() {
         repo = new FakeWriteRepository();
-        service = new UserCommandService(new FakeIdGenerator(), repo);
+        service = new UserCommandService(
+                () -> Generators.timeBasedEpochGenerator().generate().toString(),
+                repo
+        );
     }
 
     @Test
     void createUser_assignsIdAndSavesUser() {
-        String id = service.createUser(new User(null, "Charlie", LocalDate.parse("2010-01-01")));
+        String id = service.createUser(
+                new CreateUserCommand("Jack", LocalDate.of(1990, 1, 1))
+        );
 
-        assertEquals("42", id);
-        assertEquals("Charlie", repo.lastSaved.name());
+        assertNotNull(id);
+        assertFalse(id.isBlank());
+        assertEquals("Jack", repo.lastSaved.name());
     }
 
     @Test
     void updateUser_savesUpdatedUser() {
-        service.updateUser("5", new User("5", "Neo", LocalDate.parse("1990-01-01")));
+        service.updateUser(
+                new UpdateUserCommand("1", "Ann", LocalDate.of(1990, 1, 1))
+        );
 
-        assertEquals("Neo", repo.lastUpdated.name());
+        assertEquals("Ann", repo.lastUpdated.name());
     }
 
     @Test

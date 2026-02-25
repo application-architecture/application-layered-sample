@@ -1,8 +1,9 @@
 package com.architecture.layered.presentation.rest.command;
 
 import com.architecture.layered.application.api.CommandUseCase;
+import com.architecture.layered.presentation.common.dto.CreateUserRequest;
 import com.architecture.layered.presentation.common.dto.Mapper;
-import com.architecture.layered.presentation.common.dto.Request;
+import com.architecture.layered.presentation.common.dto.UpdateUserRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -20,15 +21,18 @@ public final class RestCommandController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void register(@RequestBody Request request, HttpServletResponse response) {
-        String id = service.createUser(Mapper.toDomain(request));
-        response.setHeader(HttpHeaders.LOCATION, "/users/" + id);
+    public void register(
+            @RequestBody CreateUserRequest request,
+            HttpServletResponse response
+    ) {
+        String id = service.createUser(Mapper.toCreateCommand(request));
+        response.setHeader(HttpHeaders.LOCATION, "/api/users/" + id);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void changeProfile(@PathVariable String id, @RequestBody Request request) {
-        service.updateUser(id, Mapper.toDomain(request));
+    public void changeProfile(@RequestBody UpdateUserRequest request) {
+        service.updateUser(Mapper.toUpdateCommand(request));
     }
 
     @DeleteMapping("/{id}")
@@ -36,5 +40,4 @@ public final class RestCommandController {
     public void deleteUser(@PathVariable String id) {
         service.deleteUser(id);
     }
-
 }

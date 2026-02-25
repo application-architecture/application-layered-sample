@@ -1,6 +1,7 @@
 package com.architecture.layered.web.rest;
 
 import com.architecture.layered.application.api.CommandUseCase;
+import com.architecture.layered.application.api.command.UpdateUserCommand;
 import com.architecture.layered.domain.exception.UserNotFoundException;
 import com.architecture.layered.presentation.rest.command.RestCommandController;
 import org.springframework.http.MediaType;
@@ -11,7 +12,6 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -33,7 +33,7 @@ class RestCommandControllerTest {
                         {"name": "Alice", "birthDate": "1990-01-01"}
                         """))
                 .andExpect(status().isCreated())
-                .andExpect(header().string("Location", "/users/1"));
+                .andExpect(header().string("Location", "/api/users/1"));
     }
 
     @Test
@@ -45,7 +45,7 @@ class RestCommandControllerTest {
                         """))
                 .andExpect(status().isNoContent());
 
-        then(commandUseCase).should().updateUser(eq("1"), any());
+        then(commandUseCase).should().updateUser(any(UpdateUserCommand.class));
     }
 
     @Test
@@ -59,7 +59,7 @@ class RestCommandControllerTest {
     @Test
     void shouldReturn404WhenUpdatingNonExistentUser() throws Exception {
         willThrow(new UserNotFoundException("99"))
-                .given(commandUseCase).updateUser(eq("99"), any());
+                .given(commandUseCase).updateUser(any(UpdateUserCommand.class));
 
         mvc.perform(put("/api/users/99")
                         .contentType(MediaType.APPLICATION_JSON)

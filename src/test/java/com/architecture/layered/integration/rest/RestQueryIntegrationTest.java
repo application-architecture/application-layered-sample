@@ -3,6 +3,7 @@ package com.architecture.layered.integration.rest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
@@ -12,43 +13,42 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.architecture.layered.TestData;
+
 @Transactional
 @SpringBootTest
+@ActiveProfiles("jdbc")
 @AutoConfigureMockMvc
 @Sql({"/test-schema.sql", "/test-data.sql"})
 class RestQueryIntegrationTest {
 
     @Autowired MockMvc mvc;
 
-    // findById — happy path
     @Test
     void shouldFindById() throws Exception {
-        mvc.perform(get("/api/users/1"))
+        mvc.perform(get("/api/users/" + TestData.ALICE_ID))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value("1"))
+                .andExpect(jsonPath("$.id").value(TestData.ALICE_ID))
                 .andExpect(jsonPath("$.name").value("Alice"))
                 .andExpect(jsonPath("$.birthDate").value("1990-01-01"));
     }
 
-    // findById — не найден
     @Test
     void shouldReturn404WhenUserNotFound() throws Exception {
-        mvc.perform(get("/api/users/99"))
+        mvc.perform(get("/api/users/non-existent-id"))
                 .andExpect(status().isNotFound());
     }
 
-    // findAll — возвращает всех отсортированных по id
     @Test
     void shouldReturnAllUsers() throws Exception {
         mvc.perform(get("/api/users"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(3))
-                .andExpect(jsonPath("$[0].id").value("1"))
-                .andExpect(jsonPath("$[1].id").value("2"))
-                .andExpect(jsonPath("$[2].id").value("3"));
+                .andExpect(jsonPath("$[0].name").value("Alice"))
+                .andExpect(jsonPath("$[1].name").value("Bob"))
+                .andExpect(jsonPath("$[2].name").value("Anna"));
     }
 
-    // findByPrefix — находит совпадения без учёта регистра
     @Test
     void shouldFindByPrefix() throws Exception {
         mvc.perform(get("/api/users").param("namePrefix", "A"))
@@ -58,7 +58,6 @@ class RestQueryIntegrationTest {
                 .andExpect(jsonPath("$[1].name").value("Anna"));
     }
 
-    // findByPrefix — регистронезависимость
     @Test
     void shouldFindByPrefixCaseInsensitive() throws Exception {
         mvc.perform(get("/api/users").param("namePrefix", "a"))
@@ -66,7 +65,6 @@ class RestQueryIntegrationTest {
                 .andExpect(jsonPath("$.length()").value(2));
     }
 
-    // findByPrefix — нет совпадений
     @Test
     void shouldReturnEmptyListWhenNoPrefixMatch() throws Exception {
         mvc.perform(get("/api/users").param("namePrefix", "ZZZ"))
@@ -74,7 +72,6 @@ class RestQueryIntegrationTest {
                 .andExpect(jsonPath("$.length()").value(0));
     }
 
-    // findAll без параметра и с пустым префиксом — одинаковый результат
     @Test
     void shouldReturnAllUsersWhenPrefixIsEmpty() throws Exception {
         mvc.perform(get("/api/users").param("namePrefix", ""))

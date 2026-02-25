@@ -1,7 +1,5 @@
 @param String error
 @param String message
-@param com.architecture.layered.presentation.common.dto.Response response
-@param com.architecture.layered.presentation.common.dto.Request request
 
 <h2>Main Page</h2>
 

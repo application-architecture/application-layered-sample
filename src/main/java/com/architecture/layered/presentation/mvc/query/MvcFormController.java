@@ -1,9 +1,9 @@
 package com.architecture.layered.presentation.mvc.query;
 
 import com.architecture.layered.application.api.QueryUseCase;
-import com.architecture.layered.domain.User;
+import com.architecture.layered.application.api.query.UserView;
+import com.architecture.layered.presentation.common.dto.CreateUserRequest;
 import com.architecture.layered.presentation.common.dto.Mapper;
-import com.architecture.layered.presentation.common.dto.Request;
 import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,7 +34,7 @@ public class MvcFormController {
 
     @GetMapping("/new")
     public String showCreateForm(Model model) {
-        model.addAttribute("request", new Request("", ""));
+        model.addAttribute("request", new CreateUserRequest("", ""));
         return "form/create-form";
     }
 
@@ -46,9 +46,8 @@ public class MvcFormController {
 
     @GetMapping("/{id}/delete")
     public String showDeleteConfirmationForm(@PathVariable String id, Model model) {
-        User user = service.findById(id);
-        model.addAttribute("response", Mapper.toResponse(user));
+        UserView view = service.findById(id);
+        model.addAttribute("response", Mapper.toResponse(view));
         return "form/delete-confirm-form";
     }
-
 }

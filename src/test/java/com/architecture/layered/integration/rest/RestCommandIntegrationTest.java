@@ -1,5 +1,6 @@
 package com.architecture.layered.integration.rest;
 
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Transactional
 @SpringBootTest
+@ActiveProfiles("jdbc")
 @AutoConfigureMockMvc
 @Sql("/test-schema.sql")
 class RestCommandIntegrationTest {
@@ -32,8 +34,7 @@ class RestCommandIntegrationTest {
                 .andExpect(header().exists("Location"))
                 .andReturn();
 
-        String location = result.getResponse().getHeader("Location");
-        String id = location.substring(location.lastIndexOf("/") + 1);
+        String id = extractId(result);
 
         mvc.perform(get("/api/users/" + id))
                 .andExpect(status().isOk())
@@ -55,8 +56,8 @@ class RestCommandIntegrationTest {
         mvc.perform(put("/api/users/" + id)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
-                        {"name": "Bob Updated", "birthDate": "1985-05-20"}
-                        """))
+                        {"id": "%s", "name": "Bob Updated", "birthDate": "1985-05-20"}
+                        """.formatted(id)))
                 .andExpect(status().isNoContent());
 
         mvc.perform(get("/api/users/" + id))
@@ -85,17 +86,17 @@ class RestCommandIntegrationTest {
 
     @Test
     void shouldReturn404WhenUpdatingNonExistentUser() throws Exception {
-        mvc.perform(put("/api/users/99")
+        mvc.perform(put("/api/users/non-existent-id")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
-                        {"name": "Ghost", "birthDate": "1990-01-01"}
+                        {"id": "non-existent-id", "name": "Ghost", "birthDate": "1990-01-01"}
                         """))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     void shouldReturn404WhenDeletingNonExistentUser() throws Exception {
-        mvc.perform(delete("/api/users/99"))
+        mvc.perform(delete("/api/users/non-existent-id"))
                 .andExpect(status().isNotFound());
     }
 

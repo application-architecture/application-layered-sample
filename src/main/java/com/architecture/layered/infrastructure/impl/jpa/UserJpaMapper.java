@@ -1,3 +1,4 @@
+// @formatter:off
 package com.architecture.layered.infrastructure.impl.jpa;
 
 import com.architecture.layered.domain.User;

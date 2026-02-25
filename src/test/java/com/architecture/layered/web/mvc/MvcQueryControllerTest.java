@@ -1,7 +1,7 @@
 package com.architecture.layered.web.mvc;
 
 import com.architecture.layered.application.api.QueryUseCase;
-import com.architecture.layered.domain.User;
+import com.architecture.layered.application.api.query.UserView;
 import com.architecture.layered.domain.exception.UserNotFoundException;
 import com.architecture.layered.presentation.common.dto.Mapper;
 import com.architecture.layered.presentation.mvc.query.MvcQueryController;
@@ -27,7 +27,7 @@ class MvcQueryControllerTest {
     @Autowired MockMvc mvc;
     @MockitoBean QueryUseCase queryUseCase;
 
-    private final User alice = User.create("1", "Alice", LocalDate.of(1990, 1, 1));
+    private final UserView alice = new UserView("1", "Alice", LocalDate.of(1990, 1, 1));
 
     @Test
     void shouldFindById() throws Exception {

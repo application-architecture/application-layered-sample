@@ -1,15 +1,11 @@
 package com.architecture.layered.application.api;
 
-import com.architecture.layered.domain.User;
+import com.architecture.layered.application.api.query.UserView;
 
 import java.util.List;
 
 public interface QueryUseCase {
-
-    User findById(String id);
-
-    List<User> findAll();
-
-    List<User> findByNameStartingWith(String prefix);
-
+    UserView findById(String id);
+    List<UserView> findAll();
+    List<UserView> findByNameStartingWith(String prefix);
 }

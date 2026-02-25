@@ -1,8 +1,10 @@
+// @formatter:off
 package com.architecture.layered.presentation.mvc.command;
 
 import com.architecture.layered.application.api.CommandUseCase;
+import com.architecture.layered.presentation.common.dto.CreateUserRequest;
 import com.architecture.layered.presentation.common.dto.Mapper;
-import com.architecture.layered.presentation.common.dto.Request;
+import com.architecture.layered.presentation.common.dto.UpdateUserRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,32 +24,33 @@ public class MvcCommandController {
 
     @PostMapping
     public String create(
-            @ModelAttribute Request request,
+            @ModelAttribute CreateUserRequest request,
             RedirectAttributes redirectAttributes
     ) {
-        String id = useCase.createUser(Mapper.toDomain(request));
+        String id = useCase.createUser(Mapper.toCreateCommand(request));
         redirectAttributes.addFlashAttribute("message", "User information saved successfully!");
         return "redirect:/mvc/users/search/id?id=" + id;
     }
 
     @PostMapping("/{id}")
     public String update(
-            @PathVariable String id,
-            @ModelAttribute Request request,
+            @ModelAttribute UpdateUserRequest request,
             RedirectAttributes redirectAttributes
     ) {
-        useCase.updateUser(id, Mapper.toDomain(request));
+        useCase.updateUser(Mapper.toUpdateCommand(request));
         redirectAttributes.addFlashAttribute(
-                "message", "User #" + id + " successfully updated"
+                "message", "User #" + request.id() + " successfully updated"
         );
-        return "redirect:/mvc/users/search/id?id=" + id;
+        return "redirect:/mvc/users/search/id?id=" + request.id();
     }
 
     @PostMapping("/{id}/delete")
-    public String delete(@PathVariable String id, RedirectAttributes redirectAttributes) {
+    public String delete(
+            @PathVariable String id,
+            RedirectAttributes redirectAttributes
+    ) {
         useCase.deleteUser(id);
         redirectAttributes.addFlashAttribute("message", "User deleted!");
         return "redirect:/mvc/users";
     }
-
 }

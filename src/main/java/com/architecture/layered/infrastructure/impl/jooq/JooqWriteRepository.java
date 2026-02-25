@@ -1,3 +1,4 @@
+// @formatter:off
 package com.architecture.layered.infrastructure.impl.jooq;
 
 import com.architecture.layered.domain.User;
@@ -42,17 +43,17 @@ final class JooqWriteRepository implements WriteRepository {
     }
 
     @Override
-    public void update(String id, User user) {
-        Objects.requireNonNull(id, "Id must not be null");
+    public void update(User user) {
+        Objects.requireNonNull(user.id(), "Id must not be null");
         Objects.requireNonNull(user, "User must not be null");
 
         int updated = dsl.update(table(Sql.TABLE))
                 .set(field(Sql.NAME, String.class), user.name())
                 .set(field(Sql.BIRTH_DATE, LocalDate.class), user.birthDate())
-                .where(field(Sql.ID, String.class).eq(id))
+                .where(field(Sql.ID, String.class).eq(user.id()))
                 .execute();
 
-        ensureFound(updated, id);
+        ensureFound(updated, user.id());
     }
 
     @Override

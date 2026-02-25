@@ -1,7 +1,8 @@
+// @formatter:off
 package com.architecture.layered.presentation.rest.query;
 
 import com.architecture.layered.application.api.QueryUseCase;
-import com.architecture.layered.domain.User;
+import com.architecture.layered.application.api.query.UserView;import com.architecture.layered.domain.User;
 import com.architecture.layered.presentation.common.dto.Mapper;
 import com.architecture.layered.presentation.common.dto.Response;
 import org.springframework.http.HttpStatus;
@@ -29,11 +30,11 @@ public final class RestQueryController {
     @ResponseStatus(HttpStatus.OK)
     public List<Response> list(@RequestParam(required = false) String namePrefix) {
 
-        List<User> users = (namePrefix == null)
+        List<UserView> views = (namePrefix == null)
                 ? service.findAll()
                 : service.findByNameStartingWith(namePrefix);
 
-        return users.stream().map(Mapper::toResponse).toList();
+        return views.stream().map(Mapper::toResponse).toList();
     }
 
 }

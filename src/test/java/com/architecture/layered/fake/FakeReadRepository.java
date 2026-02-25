@@ -1,3 +1,4 @@
+// @formatter:off
 package com.architecture.layered.fake;
 
 import com.architecture.layered.domain.User;
@@ -11,7 +12,6 @@ public class FakeReadRepository implements ReadRepository {
     private final Map<String, User> data = new HashMap<>();
 
     public FakeReadRepository() {
-        // можем наполнить тестовыми данными
         data.put("1", new User("1", "Alice", LocalDate.parse("2000-01-01")));
         data.put("2", new User("2", "Bob", LocalDate.parse("1999-01-01")));
     }

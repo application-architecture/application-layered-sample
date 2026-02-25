@@ -1,5 +1,5 @@
 @param String error
-@param com.architecture.layered.presentation.common.dto.Request request
+@param com.architecture.layered.presentation.common.dto.CreateUserRequest request
 
 <h2>Create New User</h2>
 
