@@ -1,7 +1,9 @@
 # Layered Monolith — Sample / Boilerplate
 
-A reference boilerplate for a classic layered monolith built with Spring Boot.  
-The goal is to demonstrate strict layer separation, effortless infrastructure replacement, and a deliberate testing pyramid.  
+A reference boilerplate for a classic layered monolith built with Spring Boot.
+
+The goal is to demonstrate strict layer separation, effortless infrastructure replacement, and a deliberate testing pyramid.
+
 The domain is intentionally minimal — a single `User` entity with full CRUD — so the architectural patterns remain in focus rather than getting buried in business details.
 
 ---
