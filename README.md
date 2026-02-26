@@ -38,6 +38,8 @@ Layer | Package | Responsibility
 
 **JPA entities never leak out.** `UserJpaEntity` is a package-private class. A dedicated `UserJpaMapper` converts between the entity and the domain object in both directions. The boundary between the persistence model and the domain is drawn explicitly — not blurred by placing `@Entity` on a domain class, which is a common mistake notably absent here.
 
+**`Mapper` as a static utility class.** A deliberate simplification — no mapping framework is involved. In a production project this would typically be replaced by MapStruct or a Spring-managed component, depending on mapping complexity and testability requirements.
+
 **Two UIs, one core.** REST controllers and MVC controllers (with HTML forms) share the same `CommandUseCase` / `QueryUseCase`. A concrete proof that the delivery mechanism has no bearing on business logic.
 
 **Separate error handling.** Two independent `@ControllerAdvice` classes — `GlobalRestExceptionHandler` and `GlobalMvcExceptionHandler` — each scoped to its own package. REST returns [RFC 9457 Problem Details](https://www.rfc-editor.org/rfc/rfc9457); MVC renders a template with an error message. Not a single catch-all solution, but context-appropriate handling for each protocol.
